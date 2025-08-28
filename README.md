@@ -10,6 +10,11 @@ VMD scripts:
 This results in a MD trajectory with the protein in the center of the periodic cell, which can then be
 used for further analysis with scripts or VMD tools (e.g. VolMap)
 
+- make_dx.tcl: Generates ion and water maps in *.dx format from provided *.psf and trajectory *.dcd files
+
+- contact_freq.tcl: Outputs the resid and atom names of the protein atoms found within 5A from the ions in the system
+using a *psf and a *dcd file as inputs.
+
 CHARMM script:
 - ion_time_series.inp: Uses the MIND CHARMM function to select the closest anion and Na ions to a defined region of
 the protein and then outputs the distance between the ions and the protein for each step of the trajectory. 
