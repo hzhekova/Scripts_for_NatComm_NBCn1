@@ -21,7 +21,11 @@ the protein and then outputs the distance between the ions and the protein for e
 The output can be used for generation of time series of the ions in the binding pocket of the protein.
 
 PyEMMA scripts:
-- ?
+- free_energy_plotys_from_ion_density.ipynb: A Jupyter notebook which generates free energy plots from provided *.xvg files.
+The xvg files are in turn generated using the following Gromacs command:
+gmx trajectory -f name_of_combined_traj_from_all_replicas.xtc -s name_of_tpr.tpr -n name_of_index.ndx -ox name_of_xvg.xvg -seltype res_com
+choosing CO3 as an available static index group in the interactive query, thus plotting the free energy corresponding to the CO3 ion density
+
 - ?
 
 More information on the usage of the scripts is provided as comments in the scripts.
