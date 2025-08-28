@@ -16,9 +16,14 @@ stream ../toppar.str
 open read unit 10 card name name_of_psf.psf
 read psf  xplo unit 10 card
 
+!The NBCn1 proteins are initially loaded with a 2Na-CO3 ion triplet bound in the central site S1
+!With the following commands we measure mindist from site S1 (using the Calpha atom of residue 976 as its proxy) to the following ions:
+!the CO3 ion bound initially at site S1 (co3s1d), all other CO3 ions in the system (co3alls1d), all HCO3 ions in the system (co31alls1d),
+!all Cl ions in the system (claalls1d), the first Na ion bound initially in S1 (sod1s1d), the second Na ion bound initially in S2 (sod2s1d)
+!all other Na ions in the system (sodalls1d)
 open unit 32 write form name name_of_file_mind_coord.dat
 write title unit 32
-*#Time  CentralCO3-S1 CentralNa1-S1 CentralNa2-S1 OtherNa-S1 OtherCO3_S1 CO31_S1 CL-S1
+*#Time co3s1d co3alls1d co31alls1d claalls1d sod1s1d sod2s1d sodalls1d
 *
 
 open unit 21 read unform name name_of_dcd.dcd
@@ -28,31 +33,58 @@ traj iread 21 nunits 1 begin 0 skip 1 stop 2000
 
 
 !Define the protein atoms that will serve as a measure of distance from site S1
-define s1 sele segid PROA .and. resid 846 .and. type CA end
+define s1 sele segid PROA .and. resid 976 .and. type CA end
 
-!Define the anion, for which the time series are calculated
-define co3 sele segid HETA .and. type C* end
+!Define the central CO3 anion (initially bound at site S1), for which the time series are calculated
+define co3 sele segid HETB .and. type C* end
 
+!Define the CO3 anion (any anion except the CO3 originally bound at S1), for which the time series are calculated
+define co3all sele resn CO3 .and. type C* .and. .not. resid 5 end
 
-!Start looping through the trajectory and for each frame evaluate the minimum distance from the CO3 ion to sites S1 (CO3-S1), the minimum distance from the closest Na ion to site S1, the minimum distance between the closest to site S1 Na ion and the CO3 ion (Na1-CO3), and the m,inimum distance between the closest CL and site S1. 
+!Define the CO31 anion (any anion), for which the time series are calculated
+define co31all sele resn CO31 .and. type C* end
+
+!Define the first Na cation of S1, for which the time series are calculated
+define sod1s1 sele segid HETA .and. resid 2 end
+
+!Define the second Na cation of S1, for which the time series are calculated
+define sod2s1 sele segid HETA .and. resid 3 end
+
+!Define all Na cations, for which the time series are calculated
+define sodall sele resn SOD .and. .not. (resid 2 .or. resid 3) end
+
+!Define the CLA anion (any anion), for which the time series are calculated
+define claall sele resn CLA end
+
+!Start looping through the trajectory and for each frame evaluate the minimum distance from site S1 to the ions listed above.
 set i = 1
 label loop
 traj read
 
 coor mind sele co3 end sele s1 end
-set co3s1 = ?mind
+set co3s1d = ?mind
 
-coor mind sele type SOD end sele s1 end
-set s1dist = ?mind
-set sod1 ?minda1  !Pick up Na+ #
-coor mind sele bynu @sod1 end sele co3 end
-set na1co3 ?mind  !Pick up Na+ #
+coor mind sele co3all end sele s1 end
+set co3alls1d ?mind
 
-coor mind sele type CLA end sele s1 end
-set chlorid1 ?mind
+coor mind sele co31all end sele s1 end
+set co31alls1d ?mind
+
+coor mind sele claall end sele s1 end
+set claalls1d ?mind
+
+coor mind sele sod1s1 end sele s1 end
+set sod1s1d ?mind
+
+coor mind sele sod2s1 end sele s1 end
+set sod2s1d ?mind
+
+coor mind sele sodall end sele s1 end
+set sodalls1d ?mind
+
 
 #Convert the trajectory steps to ns (the conversion factor depends on the trajectory saving settings during the MD simulations)
-calc time = @i * 0.24
+calc time = @i * 0.1
 
 coor stat
 coor stat sele segid MEM* end
@@ -61,10 +93,10 @@ coor stat sele segid PRO* end
 
 !Write  the information in the name_of_file_mind_coord.dat file
 write title unit 32
-*@time @co3s1 @s1dist @na1co3 @chlorid1
- 
+*@time @co3s1d @co3alls1d @co31alls1d @claalls1d @sod1s1d @sod2s1d @sodalls1d
 
-!Continue looping until the last trajectory step (in this case 5200th) is reached
+
+!Continue looping until the last trajectory step (in this case 2000th) is reached
 incr i by 1
 if i lt 2000 goto loop
 
