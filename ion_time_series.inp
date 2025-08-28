@@ -18,13 +18,13 @@ read psf  xplo unit 10 card
 
 open unit 32 write form name name_of_file_mind_coord.dat
 write title unit 32
-*#Time  CO3-S1   Na-S1  Na1-CO3 CL-S1
+*#Time  CentralCO3-S1 CentralNa1-S1 CentralNa2-S1 OtherNa-S1 OtherCO3_S1 CO31_S1 CL-S1
 *
 
 open unit 21 read unform name name_of_dcd.dcd
 
-!Read the DCD trajectory. Here the trajectory is loaded up to the 5200th frame
-traj iread 21 nunits 1 begin 0 skip 1 stop 5200
+!Read the DCD trajectory. Here the trajectory is loaded up to the 2000th frame
+traj iread 21 nunits 1 begin 0 skip 1 stop 2000
 
 
 !Define the protein atoms that will serve as a measure of distance from site S1
@@ -66,7 +66,7 @@ write title unit 32
 
 !Continue looping until the last trajectory step (in this case 5200th) is reached
 incr i by 1
-if i lt 5200 goto loop
+if i lt 2000 goto loop
 
 
 stop
