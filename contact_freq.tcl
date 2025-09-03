@@ -1,5 +1,5 @@
 #This script evaluates the contact frequencies of protein residues that come in contact with the different 
-#ions during the 200 ns long unrestrained MD calculations of hNBCn1 in OF and IF state, loaded with 2Na+ and a CO32- ion
+#ions during the 200 ns long unrestrained MD calculations of hNBCn1 in OF and IF state, loaded with 2Na+ and a CO32- ions
 #To use: vmd -dispdev text -e contact_freq.tcl 
 set outfile [open "name_of_results_file.dat" w]
 #####
