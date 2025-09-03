@@ -26,6 +26,11 @@ The xvg files are in turn generated using the following Gromacs command:
 gmx trajectory -f name_of_combined_traj_from_all_replicas.xtc -s name_of_tpr.tpr -n name_of_index.ndx -ox name_of_xvg.xvg -seltype res_com
 choosing CO3 as an available static index group in the interactive query, thus plotting the free energy corresponding to the CO3 ion density
 
-- ?
+- NBCn1_OF_IF_transition_clustering.ipynb: A Jupyter notebook which separates trajectory snapshots from two sets of trajectories (of independent
+MD simulations starting with intermediate Climber structures) into structural clusters in the OF to IF conformation space
+defined by COM distances between gate and core TMs and plots a free energy map of the OF to IF transition from population analysis using
+the clusters. The structural features used in the clustering are supplied as .xvg files produced with the following Groimacs command:
+gmx_mpi distance -f traj.xtc -s ../folder1/ref.tpr -n ../index.ndx -oav distav_TM1_1us.xvg -select 'cog of group GATE plus cog of group TM1
+where GATE and TM1 are defined as group of atoms in the index file index.ndx
 
 More information on the usage of the scripts is provided as comments in the scripts.
